@@ -1,26 +1,23 @@
-// Set the scroll speed factor
-let scrollSpeed = 150;
+const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true
+})
 
-// Add an event listener for the 'wheel' event
-document.addEventListener('wheel', function(event) {
-  // Prevent default scrolling behavior
-  event.preventDefault();
+function raf(time){
+    lenis.raf(time)
+    requestAnimationFrame(raf)
+}
 
-  // Calculate the new scroll position
-  let delta = event.deltaY;
-  let scrollPosition = window.scrollY + (delta * scrollSpeed);
+requestAnimationFrame(raf)
 
-  // Set the new scroll position
-  window.scrollTo({
-    top: scrollPosition,
-    behavior: 'smooth'
-  });
-}, { passive: false });
-
+// gsap horizontal scrolling
+// register scroll trigger plugin
 gsap.registerPlugin(ScrollTrigger)
 
 const main = document.querySelector("main")
 
+// convert elements into arrays
 const oddImages = gsap.utils.toArray(".odd")
 const evenImages = gsap.utils.toArray(".even")
 const divs = gsap.utils.toArray(".section")
@@ -35,7 +32,7 @@ let scrollTween =  gsap.to(".main",{
         trigger: ".main",
         scrub: true,
         pin: true,
-        end: `+${main.offsetWidth}`
+        end: `+=${main.offsetWidth}`
     }
 })
 
